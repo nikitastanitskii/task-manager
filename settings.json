@@ -1,0 +1,9 @@
+{
+  "POSTGRES_SETTINGS": {
+    "HOST": "localhost",
+    "PORT": "5436",
+    "DB": "postgres",
+    "USER": "postgres",
+    "PASSWORD": "postgres"
+  }
+}

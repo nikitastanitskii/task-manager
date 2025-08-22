@@ -1,19 +1,24 @@
-from typing import Iterator
-from sqlalchemy.orm import DeclarativeBase, sessionmaker, Session
-from sqlalchemy import create_engine
+from typing import AsyncIterator
+
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase
 
 from src.core.settings import get_settings
 
 
 class Base(DeclarativeBase):
-    """Базовый класс для создания моделей"""
+    """Базовый класс для моделей"""
 
 
-engine = create_engine(url=get_settings().POSTGRES_SETTINGS.db_url, echo=True)
+engine = create_async_engine(
+    url=get_settings().POSTGRES_SETTINGS.db_url, echo=True
+)
 
 
-def get_session() -> Iterator[Session]:
-    """Синхронное подключение"""
-    session_maker = sessionmaker(autocommit=False, bind=engine, expire_on_commit=False)
-    with session_maker as session:
+async def get_session() -> AsyncIterator[AsyncSession]:
+    """Асинхронное подключение"""
+    session_maker = async_sessionmaker(
+        autocommit=False, bind=engine, expire_on_commit=False
+    )
+    async with session_maker() as session:
         yield session
